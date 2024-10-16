@@ -1,0 +1,109 @@
+streamlit
+fpdf
+langgraph
+langchain-core
+pydantic
+IPython
+python-dotenv==1.0.0
+langchain-groq
+langchain_groq
+
+
+
+content_generation_prompt = """
+You are tasked with generating insightful content for the following topic.
+
+Your goal is to produce a concise and meaningful explanation under 1000 words, focusing on both **interesting** and **specific** insights.
+
+1. **Interesting**: Provide insights that people will find surprising or non-obvious.
+2. **Specific**: Avoid generalities and offer specific examples or details related to the topic.
+
+Here is your **topic**: {topic}
+
+Based on this topic, generate content that offers unique insights and useful information. Ensure the response is under 1000 words.
+
+When you're satisfied with the content, conclude with: "This is a focused insight on the topic."
+
+Make sure your content is concise, reflective of the topic, and meets the word limit requirement."""
+
+
+
+
+
+
+TOC_instruction = """
+
+You are required to create TOC. Follow these steps exactly and ensure the output meets the specified format.
+
+---
+
+
+### **Step-by-Step Instructions:**
+
+1. **Review the Title:**
+   - Review the following title provided by the user:
+     - `{title}`
+   - All chapters and topics must be relevant to this title.
+
+2. **Analyze Editorial Feedback:**
+   - If any feedback is provided, review it carefully:
+     - `{human_feedback}`
+   - Use this feedback to shape the focus of the chapters and topics in the Table of Contents. If no feedback is given, prioritize the general relevance of the provided title.
+
+3. **Identify and Select Key Chapters:**
+   - Analyze the title and any feedback to extract significant themes or sections.
+   - Select the top `{max_chapters}` chapters based on the relevance to the title.
+   - Each chapter must represent a distinct, critical aspect of the title.
+
+4. **Create the Table of Contents:**
+   - For each selected chapter, create corresponding topics.
+   - The Table of Contents must include the following information:
+     - **Chapter Title**: A clear title for each chapter that represents the main idea or theme.
+     - **Chapter Number**: The numerical order of the chapter (e.g., 1, 2, 3).
+     - **Topic Title**: A descriptive title for each topic within the chapter.
+     - **Topic Number**: The numerical order of the topic within the chapter (e.g., 1.1, 1.2).
+
+---
+
+**Output Format – Mandatory Requirements:**
+
+- The output **must** be in valid JSON format.
+- The JSON must include the following structure:
+  - A key `"toc_id"` for a unique identifier of the Table of Contents.
+  - A key `"title"` for the Table of Contents title.
+  - A key `"description"` for a short description of the Table of Contents.
+  - A key `"chapters"` which is an array (list) of chapter objects.
+  - Each chapter object must contain the following fields:
+    - `"chapter_id"`: Unique ID for each chapter.
+    - `"chapter_title"`: Title of the chapter.
+    - `"chapter_number"`: Number of the chapter.
+    - `"topics"`: An array (list) of topic objects.
+      - `"topic_id"`: Unique ID for each topic.
+      - `"topic_title"`: Title of the topic.
+      - `"topic_number"`: Number of the topic.
+
+The exact output format is as follows:
+
+```
+{{
+  "toc_id": "string",         // Unique ID for the TOC
+  "title": "string",          // Title of the Table of Content
+  "description": "string",    // Short description of the TOC
+  "chapters": [
+    {{
+      "chapter_id": "string",   // Unique ID for each chapter
+      "chapter_title": "string", // Title of the chapter
+      "chapter_number": "integer", // Number of the chapter (e.g., 1, 2, 3)
+      "topics": [
+        {{
+          "topic_id": "string",   // Unique ID for each topic
+          "topic_title": "string", // Title of the topic
+          "topic_number": "float" // Number of the topic (e.g., 1.1, 1.2)
+        }}
+      ]
+    }}
+  ]
+}}
+```
+
+"""
